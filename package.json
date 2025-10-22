@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start:local": "tsc && node dist/index.js",
     "format:check": "prettier '**/*.{j,t}{s,sx}' --check",
     "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}'",
     "types:check": "tsc --noEmit"
@@ -26,5 +27,10 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.0"
+  },
+  "dependencies": {
+    "@octokit/rest": "^22.0.0",
+    "dotenv": "^17.2.3",
+    "openai": "^6.6.0"
   }
 }

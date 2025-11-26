@@ -57,7 +57,7 @@ async function fetchPrFiles(prNumber: number): Promise<FileChange[]> {
 
 async function fetchFileContent(
   filename: string,
-  ref: string
+  ref: string,
 ): Promise<string | null> {
   try {
     const { data } = await octokit.rest.repos.getContent({
@@ -107,10 +107,10 @@ function parseDiffIntoHunks(fileChange: FileChange): DiffHunk[] {
       };
     } else if (currentHunk) {
       currentHunk.content += line + "\n";
-      if (line.startsWith('+')) {
+      if (line.startsWith("+")) {
         currentHunk.lastChangedLine = currentNewStart;
         currentNewStart++;
-      } else if (line.startsWith(' ')) {
+      } else if (line.startsWith(" ")) {
         currentNewStart++;
       }
     }
@@ -124,7 +124,7 @@ function parseDiffIntoHunks(fileChange: FileChange): DiffHunk[] {
 
 async function getAIReview(
   hunk: DiffHunk,
-  fileContext: string | null
+  fileContext: string | null,
 ): Promise<string | null> {
   try {
     const contextInfo = fileContext
@@ -153,7 +153,9 @@ Change at line ${hunk.newStart}:
 ${hunk.content}
 \`\`\`${contextInfo}`;
 
-    console.log(`  Reviewing hunk in ${hunk.filename} at line ${hunk.newStart}...`);
+    console.log(
+      `  Reviewing hunk in ${hunk.filename} at line ${hunk.newStart}...`,
+    );
 
     console.log("Getting AI review...");
     const response = await client.responses.create({
@@ -173,11 +175,13 @@ async function postOrUpdateInlineComment(
   filename: string,
   line: number,
   comment: string,
-  commitId: string
+  commitId: string,
 ): Promise<void> {
   try {
     if (isDryRun) {
-      console.log(`  [DRY RUN] Would post comment on ${filename} at line ${line}`);
+      console.log(
+        `  [DRY RUN] Would post comment on ${filename} at line ${line}`,
+      );
       console.log(`  Comment: ${comment}\n`);
       return;
     }
@@ -187,10 +191,11 @@ async function postOrUpdateInlineComment(
       pull_number: prNumber,
     });
 
-    const existingComment = comments.find((comment) =>
-      comment.path === filename &&
-      comment.line === line &&
-      comment.body?.includes("<!-- AI-REVIEW-COMMENT -->"),
+    const existingComment = comments.find(
+      (comment) =>
+        comment.path === filename &&
+        comment.line === line &&
+        comment.body?.includes("<!-- AI-REVIEW-COMMENT -->"),
     );
 
     const versionMatch = existingComment?.body?.match(/\(v(\d+)\)/);
@@ -198,7 +203,6 @@ async function postOrUpdateInlineComment(
     const commentBody = existingComment
       ? `<!-- AI-REVIEW-COMMENT -->
            AI Code Review (v${version})\n\n${comment}`
-
       : `<!-- AI-REVIEW-COMMENT -->
            AI Code Review (v1)\n\n${comment}`;
 
@@ -218,10 +222,9 @@ async function postOrUpdateInlineComment(
         body: commentBody,
         commit_id: commitId,
         path: filename,
-        line: line
+        line: line,
       });
       console.log("Created new AI review comment");
-
     }
   } catch (error) {
     console.error("Error posting/updating review:", error);
@@ -255,14 +258,15 @@ async function reviewPrWithInlineComments(prNumber: number): Promise<void> {
       continue;
     }
 
-    console.log(`\n Reviewing ${file.filename} (+${file.additions} -${file.deletions})`);
+    console.log(
+      `\n Reviewing ${file.filename} (+${file.additions} -${file.deletions})`,
+    );
 
     const fileContext = await fetchFileContent(file.filename, baseRef);
     const hunks = parseDiffIntoHunks(file);
     console.log(`  Found ${hunks.length} hunk`);
 
     for (const hunk of hunks) {
-
       const review = await getAIReview(hunk, fileContext);
 
       if (review) {
@@ -271,13 +275,15 @@ async function reviewPrWithInlineComments(prNumber: number): Promise<void> {
           file.filename,
           hunk.lastChangedLine,
           review,
-          commitId
+          commitId,
         );
         totalComments++;
       }
     }
   }
-  console.log(`\n Review complete! ${isDryRun ? "Would post" : "Posted"} ${totalComments} inline comment(s)`);
+  console.log(
+    `\n Review complete! ${isDryRun ? "Would post" : "Posted"} ${totalComments} inline comment(s)`,
+  );
 }
 
 async function runLocalMode(): Promise<void> {

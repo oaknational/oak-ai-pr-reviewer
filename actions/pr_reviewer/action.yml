@@ -1,5 +1,5 @@
 name: "AI PR Reviewer"
-description: "Run an AI-based review on a pull request and post a comment with the results."
+description: "Run an AI-based inline review on a pull request and post comments at specific lines."
 inputs:
   openai_api_key:
     description: 'OpenAI API key.'
@@ -60,25 +60,17 @@ runs:
       working-directory: ${{ github.action_path }}
       run: npm ci && npm run build
 
-    - name: Get PR diff
-      shell: bash
-      run: |
-        git diff origin/${{ steps.get-pr.outputs.base-ref }}...HEAD > pr.diff
-        echo "Diff saved to pr.diff"
-
-    - name: Run AI review
+    - name: Run AI inline review
       shell: bash
       env:
         OPENAI_API_KEY: ${{ inputs.openai_api_key }}
         GITHUB_TOKEN: ${{ inputs.github_token }}
         PR_NUMBER: ${{ steps.get-pr.outputs.pr-number }}
         GITHUB_REPOSITORY: ${{ github.repository }}
-        BASE_REF: ${{ steps.get-pr.outputs.base-ref }}
-        HEAD_REF: ${{ steps.get-pr.outputs.head-ref }}
       run: |
-        node ${{ github.action_path }}/dist/reviewPr.js
+        node ${{ github.action_path }}/dist/index.js
 
-    - name: React to comment
+    - name: React to comment with success
       if: inputs.comment_id != '' && success()
       uses: actions/github-script@v7
       with:

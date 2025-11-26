@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
     "start:local": "tsc && node dist/index.js",
     "format:check": "prettier '**/*.{j,t}{s,sx}' --check",
     "format:fix": "prettier '**/*.{j,t}{s,sx}' --write",

@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:local": "tsc && node dist/index.js",
     "format:check": "prettier '**/*.{j,t}{s,sx}' --check",
+    "format:fix": "prettier '**/*.{j,t}{s,sx}' --write",
     "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}'",
     "types:check": "tsc --noEmit"
   },

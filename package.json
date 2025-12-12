@@ -22,7 +22,7 @@
     "eslint-plugin-prettier": "^5.5.4",
     "globals": "^16.4.0",
     "jiti": "^2.6.1",
-    "next": "^13.4.19",
+    "next": "^14.2.35",
     "prettier": "^3.6.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",

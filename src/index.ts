@@ -178,9 +178,8 @@ CRITICAL RULES:
    - Obvious or trivial observations
 3. Focus on HIGH-IMPACT issues only
 4. Do not hallucinate, always use documentations or official references and provide links.
-5. Dont review files like gitignore, terraform.lock.hcl, package-lock.json etc
-6. If no issues found write exactly "LGTM"
-7. NO bullet points, NO multiple suggestions, NO "considerations"
+5. Dont comment on files like .gitignore, terraform.lock.hcl, package-lock.json etc
+6. NO bullet points, NO multiple suggestions, NO "considerations"
 
 If you find a significant issue:
 - State the problem clearly in 1-2 sentences
@@ -214,9 +213,7 @@ ${hunk.content}
       instructions: instruction,
       input: input,
     });
-    if (response.output_text === "LGTM") {
-      return null;
-    }
+
     return response.output_text || "Unable to generate review.";
   } catch (error) {
     console.error("Error reviewing", error);

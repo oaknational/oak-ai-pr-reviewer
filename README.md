@@ -54,6 +54,7 @@ The action will:
 2. Analyze all changed files
 3. Post inline comments on issues found
 4. React with "thumb up" when done.
+```
 
 To run locally.
 - Clone the repository; `git clone https://github.com/oaknational/oak-ai-pr-reviewer.git` ->

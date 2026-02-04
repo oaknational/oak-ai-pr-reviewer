@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
+    "build": "tsc src/index.ts --outDir actions/pr_reviewer/dist --target es2020 --module esnext --moduleResolution node",
     "start:local": "tsc && node dist/index.js",
     "start:local:dry": "DRY_RUN=true tsc && node dist/index.js",
     "format:check": "prettier '**/*.{j,t}{s,sx}' --check",
